@@ -12,9 +12,16 @@ class Goal(Enum):
 
 VALID_GOALS = [goal.value for goal in Goal]
 
+DEFAULT_EPSILON = 1e-4
+DEFAULT_MAX_ITER = 300
+DEFAULT_BETA = 0.5
+
 def c_symnmf(
     initial_H: List[List[float]],
     W: List[List[float]],
+    epsilon: float = 1e-4,
+    max_iter: int = 300,
+    beta: float = 0.5,
     ### MORE STUFF ###
     # k: int,
     # max_iter: int,
@@ -91,6 +98,6 @@ if __name__ == "__main__":
         W = c_norm(datapoints) # TODO replace this with the c-python call
         W_np = np.array(W)
         H_init = init_H(k, W_np)
-        res = H_final = c_symnmf(H_init, W)
+        res = H_final = c_symnmf(H_init, W, DEFAULT_EPSILON, DEFAULT_MAX_ITER, DEFAULT_BETA)
 
     print_result(res)        

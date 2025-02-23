@@ -113,7 +113,7 @@ matrix_t convert_to_matrix(PyObject* float_matrix) {
 static PyObject * c_sym(PyObject * self, PyObject * args) {
     PyObject * py_matrix = NULL;
 
-    if(!PyArg_ParseTuple(args, "O", &py_matrix)) {
+    if(!PyArg_Parse(args, "O", &py_matrix)) {
         PyErr_SetString(PyExc_TypeError, "failure parsing parameters");
         return NULL;
     }
@@ -136,7 +136,7 @@ static PyObject * c_sym(PyObject * self, PyObject * args) {
 static PyObject * c_ddg(PyObject * self, PyObject * args) {
     PyObject * py_matrix = NULL;
 
-    if(!PyArg_ParseTuple(args, "O", &py_matrix)) {
+    if(!PyArg_Parse(args, "O", &py_matrix)) {
         PyErr_SetString(PyExc_TypeError, "failure parsing parameters");
         return NULL;
     }
@@ -159,7 +159,7 @@ static PyObject * c_ddg(PyObject * self, PyObject * args) {
 static PyObject * c_norm(PyObject * self, PyObject * args) {
     PyObject * py_matrix = NULL;
 
-    if(!PyArg_ParseTuple(args, "O", &py_matrix)) {
+    if(!PyArg_Parse(args, "O", &py_matrix)) {
         PyErr_SetString(PyExc_TypeError, "failure parsing parameters");
         return NULL;
     }

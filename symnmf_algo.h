@@ -15,7 +15,7 @@ matrix_t norm(matrix_t datapoints);
 
 void perform_symnmf_iteration(matrix_t H, matrix_t W, double beta);
 double calc_symnmf_index(matrix_t H, matrix_t WH, matrix_t HHTH, double beta, size_t i, size_t j);
-matrix_t symnmf(matrix_t H, matrix_t W, double eps, double beta, size_t max_iter);
+matrix_t symnmf(matrix_t H, matrix_t W, double eps, size_t max_iter, double beta);
 
 
 #endif

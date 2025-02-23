@@ -43,7 +43,7 @@ void perform_symnmf_iteration(matrix_t H, matrix_t W, double beta)
 
 // TODO make sure to free everything
 // Assumes that max_iter >= 1
-matrix_t symnmf(matrix_t H, matrix_t W, double eps, double beta, size_t max_iter)
+matrix_t symnmf(matrix_t H, matrix_t W, double eps, size_t max_iter, double beta)
 {
     size_t iter_num = 0;
     matrix_t old_H = copy_matrix(H);

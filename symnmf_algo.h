@@ -2,15 +2,17 @@
 #define SYMNF_ALGO_H
 
 #include <stdlib.h>
+#include "matrix_utils.h"
 
-#define ERR_MATRIX (matrix_t){ 0 }
 
-typedef struct matrix_s {
-    double** data;
-    double* raw_data;
-    size_t height;
-    size_t width;
-} matrix_t;
+
+matrix_t sym(matrix_t datapoints);
+
+matrix_t ddg(matrix_t datapoints);
+
+matrix_t norm(matrix_t datapoints);
+
+matrix_t symnmf(matrix_t H, matrix_t W, double eps, double beta)
 
 
 #endif

@@ -42,6 +42,7 @@ void perform_symnmf_iteration(matrix_t H, matrix_t W, double beta)
 }
 
 // TODO make sure to free everything
+// Assumes that max_iter >= 1
 matrix_t symnmf(matrix_t H, matrix_t W, double eps, double beta, size_t max_iter)
 {
     size_t iter_num = 0;
@@ -54,12 +55,11 @@ matrix_t symnmf(matrix_t H, matrix_t W, double eps, double beta, size_t max_iter
         free_matrix(old_H);
         old_H = copy_matrix(H);
         iter_num++;
-    } while (diff > eps && iter_num < max_iter); //TODO check if the max iter is checked correctly
+    } while (diff >= eps && iter_num < max_iter); 
 
     free_matrix(old_H);
     return H;
 }
-
 
 double calc_sym_index(matrix_t datapoints, size_t i, size_t j)
 {
@@ -80,4 +80,47 @@ matrix_t sym(matrix_t datapoints)
     }
 
     return A;
+}
+
+double calc_degree_of_vertex(matrix_t A, size_t i)
+{
+    double sum = 0;
+    for (size_t j = 0; j < A.width; j++)
+    {
+        sum += A.data[i][j];
+    }
+    return sum;
+}
+
+matrix_t ddg(matrix_t datapoints)
+{
+    matrix_t A = sym(datapoints);
+    matrix_t D = alloc_matrix(datapoints.height, datapoints.height);
+    
+    for (size_t i = 0; i < datapoints.height; i++)
+    {
+        D.data[i][i] = calc_degree_of_vertex(A, i);
+    }
+    
+    free_matrix(A);
+    return D;
+}
+
+
+matrix_t norm(matrix_t datapoints)
+{
+    matrix_t D = ddg(datapoints);
+    matrix_t A = sym(datapoints);
+    matrix_t D_inv_sqrt = alloc_matrix(datapoints.height, datapoints.height);
+    for (size_t i = 0; i < datapoints.height; i++)
+    {
+        D_inv_sqrt.data[i][i] = 1 / sqrt(D.data[i][i]);
+    }
+    matrix_t AD_inv_sqrt = dot(A, D_inv_sqrt);
+    matrix_t norm = dot(D_inv_sqrt, AD_inv_sqrt);
+    free_matrix(D);
+    free_matrix(A);
+    free_matrix(D_inv_sqrt);
+    free_matrix(AD_inv_sqrt);
+    return norm;
 }

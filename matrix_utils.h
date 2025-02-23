@@ -4,8 +4,8 @@
 #include <stdlib.h>
 
 
-#define ERR_MATRIX (matrix_t){ 0 }
-#define FROB_ERROR -1
+#define ERR_MATRIX ((matrix_t){ 0 })
+#define FROB_ERROR (-1)
 
 typedef struct matrix_s {
     double** data;

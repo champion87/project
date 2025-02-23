@@ -6,20 +6,46 @@
 
 
 
-static PyObject * c_sym(PyObject * self, PyObject * args) {
 
+
+PyObject * build_py_FloatList(double * cords, size_t len) {
+    PyObject * ans;
+    
+    ans = PyList_New(len);
+    if (!ans) {
+        return PyErr_NoMemory(); // Raise a memory error if list creation fails
+    }
+    
+    // Fill the list with the given double value
+    for (size_t i = 0; i < len; i++) {
+        PyObject* py_float = PyFloat_FromDouble(cords[i]);
+        if (!py_float) {
+            Py_DECREF(ans);
+            return PyErr_NoMemory(); // Raise a memory error if float creation fails
+        }
+        PyList_SetItem(ans, i, py_float);
+    }
+
+    return ans;
 }
 
-static PyObject * c_ddg(PyObject * self, PyObject * args) {
 
-}
+PyObject * build_list_list_float(matrix_t mat) {
+    PyObject * ans;
+    ans = PyList_New(mat.height);
+    if (!ans) {
+        return PyErr_NoMemory(); // Raise a memory error if list creation fails
+    }
+    for (Py_ssize_t i = 0; i < mat.height; i++) {
+        PyObject * row = build_py_FloatList(mat.data[i], mat.width);
+        if (!row) {
+            Py_DECREF(ans);
+            return row;
+        }
 
-static PyObject * c_norm(PyObject * self, PyObject * args) {
-
-}
-
-static PyObject * c_symnmf(PyObject * self, PyObject * args) {
-
+        PyList_SetItem(ans, i, row);
+    }
+    return ans;
 }
 
 matrix_t convert_to_matrix(PyObject* float_matrix) {
@@ -84,6 +110,80 @@ matrix_t convert_to_matrix(PyObject* float_matrix) {
 
     return ans;
 }
+
+static PyObject * c_sym(PyObject * self, PyObject * args) {
+    PyObject * py_matrix = NULL;
+
+    if(!PyArg_ParseTuple(args, "O", &py_matrix)) {
+        PyErr_SetString(PyExc_TypeError, "failure parsing parameters");
+        return NULL;
+    }
+    matrix_t c_matrix = convert_to_matrix(py_matrix);
+    if (c_matrix.data == NULL) {
+        return NULL;
+    }
+
+    matrix_t c_result = sym(c_matrix);
+    free_matrix(c_matrix);
+    if (c_result.data == NULL) {
+        PyErr_SetString(PyExc_ValueError, "error calculatting the Similarity Matrix");
+        return NULL;
+    }
+    PyObject * py_result = build_list_list_float(c_result);
+    free_matrix(c_result);
+    return py_result;
+}
+
+static PyObject * c_ddg(PyObject * self, PyObject * args) {
+    PyObject * py_matrix = NULL;
+
+    if(!PyArg_ParseTuple(args, "O", &py_matrix)) {
+        PyErr_SetString(PyExc_TypeError, "failure parsing parameters");
+        return NULL;
+    }
+    matrix_t c_matrix = convert_to_matrix(py_matrix);
+    if (c_matrix.data == NULL) {
+        return NULL;
+    }
+
+    matrix_t c_result = ddg(c_matrix);
+    free_matrix(c_matrix);
+    if (c_result.data == NULL) {
+        PyErr_SetString(PyExc_ValueError, "error calculatting the diagonal degree Matrix");
+        return NULL;
+    }
+    PyObject * py_result = build_list_list_float(c_result);
+    free_matrix(c_result);
+    return py_result;
+}
+
+static PyObject * c_norm(PyObject * self, PyObject * args) {
+    PyObject * py_matrix = NULL;
+
+    if(!PyArg_ParseTuple(args, "O", &py_matrix)) {
+        PyErr_SetString(PyExc_TypeError, "failure parsing parameters");
+        return NULL;
+    }
+    matrix_t c_matrix = convert_to_matrix(py_matrix);
+    if (c_matrix.data == NULL) {
+        return NULL;
+    }
+
+    matrix_t c_result = ddg(c_matrix);
+    free_matrix(c_matrix);
+    if (c_result.data == NULL) {
+        PyErr_SetString(PyExc_ValueError, "error calculatting the normalized similarity matrix");
+        return NULL;
+    }
+    PyObject * py_result = build_list_list_float(c_result);
+    free_matrix(c_result);
+    return py_result;
+}
+
+static PyObject * c_symnmf(PyObject * self, PyObject * args) {
+
+}
+
 
 
 static PyMethodDef symnmfMethods[] = {

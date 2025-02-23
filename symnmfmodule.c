@@ -168,7 +168,7 @@ static PyObject * c_norm(PyObject * self, PyObject * args) {
         return NULL;
     }
 
-    matrix_t c_result = ddg(c_matrix);
+    matrix_t c_result = norm(c_matrix);
     free_matrix(c_matrix);
     if (c_result.data == NULL) {
         PyErr_SetString(PyExc_ValueError, "error calculatting the normalized similarity matrix");

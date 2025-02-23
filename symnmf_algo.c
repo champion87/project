@@ -4,6 +4,8 @@
 
 
 void free_matrix(matrix_t mat) {
-    free(mat.raw_data);
-    free(mat.data);
+    if (mat.raw_data != NULL)
+        free(mat.raw_data);
+    if (mat.data != NULL)
+        free(mat.data);
 }

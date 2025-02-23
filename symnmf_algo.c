@@ -105,3 +105,22 @@ matrix_t ddg(matrix_t datapoints)
     free_matrix(A);
     return D;
 }
+
+
+matrix_t norm(matrix_t datapoints)
+{
+    matrix_t D = ddg(datapoints);
+    matrix_t A = sym(datapoints);
+    matrix_t D_inv_sqrt = alloc_matrix(datapoints.height, datapoints.height);
+    for (size_t i = 0; i < datapoints.height; i++)
+    {
+        D_inv_sqrt.data[i][i] = 1 / sqrt(D.data[i][i]);
+    }
+    matrix_t AD_inv_sqrt = dot(A, D_inv_sqrt);
+    matrix_t norm = dot(D_inv_sqrt, AD_inv_sqrt);
+    free_matrix(D);
+    free_matrix(A);
+    free_matrix(D_inv_sqrt);
+    free_matrix(AD_inv_sqrt);
+    return norm;
+}

@@ -81,3 +81,27 @@ matrix_t sym(matrix_t datapoints)
 
     return A;
 }
+
+double calc_degree_of_vertex(matrix_t A, size_t i)
+{
+    double sum = 0;
+    for (size_t j = 0; j < A.width; j++)
+    {
+        sum += A.data[i][j];
+    }
+    return sum;
+}
+
+matrix_t ddg(matrix_t datapoints)
+{
+    matrix_t A = sym(datapoints);
+    matrix_t D = alloc_matrix(datapoints.height, datapoints.height);
+    
+    for (size_t i = 0; i < datapoints.height; i++)
+    {
+        D.data[i][i] = calc_degree_of_vertex(A, i);
+    }
+    
+    free_matrix(A);
+    return D;
+}

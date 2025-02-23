@@ -8,6 +8,7 @@
 double calc_sym_index(matrix_t datapoints, size_t i, size_t j);
 matrix_t sym(matrix_t datapoints);
 
+double calc_degree_of_vertex(matrix_t A, size_t i);
 matrix_t ddg(matrix_t datapoints);
 
 matrix_t norm(matrix_t datapoints);

@@ -42,6 +42,7 @@ void perform_symnmf_iteration(matrix_t H, matrix_t W, double beta)
 }
 
 // TODO make sure to free everything
+// Assumes that max_iter >= 1
 matrix_t symnmf(matrix_t H, matrix_t W, double eps, double beta, size_t max_iter)
 {
     size_t iter_num = 0;
@@ -54,12 +55,11 @@ matrix_t symnmf(matrix_t H, matrix_t W, double eps, double beta, size_t max_iter
         free_matrix(old_H);
         old_H = copy_matrix(H);
         iter_num++;
-    } while (diff > eps && iter_num < max_iter); //TODO check if the max iter is checked correctly
+    } while (diff >= eps && iter_num < max_iter); 
 
     free_matrix(old_H);
     return H;
 }
-
 
 double calc_sym_index(matrix_t datapoints, size_t i, size_t j)
 {

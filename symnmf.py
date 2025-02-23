@@ -22,10 +22,6 @@ def c_symnmf(
     epsilon: float = 1e-4,
     max_iter: int = 300,
     beta: float = 0.5,
-    ### MORE STUFF ###
-    # k: int,
-    # max_iter: int,
-    # tol: float,
 ) -> List[List[float]]:
     pass
 

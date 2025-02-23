@@ -3,7 +3,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define INVALID_DIFF (-1)
+#define IS_VALID_DIFF(diff) (diff >= 0)
 
+// Calculates the new value of that should be at a given index for the matrix H in the optimisation step.
+// The formula is Hij * (1 - beta + beta * (WHij / HHTHij))
 double calc_index(matrix_t H, matrix_t WH, matrix_t HHTH, double beta, size_t i, size_t j)
 {
     double Hij = H.data[i][j];
@@ -13,6 +17,7 @@ double calc_index(matrix_t H, matrix_t WH, matrix_t HHTH, double beta, size_t i,
     return res;
 }
 
+// Performs the optimization iteration inplace, i.e. changing the value of H.data[][]
 void perform_iteration(matrix_t H, matrix_t W, double beta)
 {
     matrix_t WH = dot(W, H);
@@ -34,13 +39,22 @@ void perform_iteration(matrix_t H, matrix_t W, double beta)
     free_matrix(WH);
     free_matrix(HHTH);
 }
+
 // TODO make sure to free everything
-matrix_t symnmf(matrix_t H, matrix_t W, double eps, double beta)
+matrix_t symnmf(matrix_t H, matrix_t W, double eps, double beta, size_t max_iter)
 {
+    size_t iter_num = 0;
     matrix_t old_H = copy_matrix(H);
+    double diff = INVALID_DIFF;
     do
     {
         perform_iteration(H, W, beta);
-    } while ();
-    
+        diff = frobenius_distance_squared(H, old_H);
+        free_matrix(old_H);
+        old_H = copy_matrix(H);
+        iter_num++;
+    } while (diff > eps && iter_num < max_iter); //TODO check if the max iter is checked correctly
+
+    free_matrix(old_H);
+    return H;
 }

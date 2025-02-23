@@ -7,7 +7,27 @@ void free_matrix(matrix_t mat) {
         free(mat.data);
 }
 
-matrix_t dot(matrix_t A, matrix_t B)
+double frobenius_distance_squared(matrix_t A, matrix_t B) // TODO: check that this code is right
+{
+    if (A.height != B.height || A.width != B.width)
+    {
+        return FROB_ERROR;
+    }
+
+    double sum = 0;
+    for (size_t i = 0; i < A.height; i++)
+    {
+        for (size_t j = 0; j < A.width; j++)
+        {
+            sum += pow(A.data[i][j] - B.data[i][j], 2);
+        }
+    }
+
+    return sum;
+}
+
+
+matrix_t dot(matrix_t A, matrix_t B) // TODO: check that this code is right
 {
     if (A.width != B.height)
     {
@@ -38,7 +58,7 @@ matrix_t dot(matrix_t A, matrix_t B)
     return result;
 }
 
-matrix_t transpose(matrix_t A)
+matrix_t transpose(matrix_t A) // TODO: check that this code is right
 {
     matrix_t result = {
         .height = A.width,

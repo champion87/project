@@ -5,6 +5,7 @@
 
 
 #define ERR_MATRIX (matrix_t){ 0 }
+#define FROB_ERROR -1
 
 typedef struct matrix_s {
     double** data;
@@ -17,5 +18,6 @@ void free_matrix(matrix_t mat);
 matrix_t dot(matrix_t A, matrix_t B);
 matrix_t transpose(matrix_t A);
 matrix_t copy_matrix(matrix_t mat);
+double frobenius_distance_squared(matrix_t A, matrix_t B);
 
 #endif

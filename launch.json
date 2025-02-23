@@ -1,0 +1,39 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "cwd": "${fileDirname}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "(gdb) Attach to Python Process",
+            "type": "cppdbg",
+            "request": "attach",
+            "program": "/usr/bin/python3",  
+            "processId": "${command:pickProcess}",
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set GDB to work with Python",
+                    "text": "-gdb-set python print-stack on",
+                    "ignoreFailures": false
+                }
+            ],
+            "miDebuggerPath": "/usr/bin/gdb", // Ensure this points to the correct GDB path
+            "MIMessages": true,
+            "logging": {
+                "moduleLoad": true
+            },
+            "stopAtEntry": false
+        }
+    ]
+}

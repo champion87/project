@@ -49,9 +49,9 @@ PyObject * build_list_list_float(matrix_t mat) {
 }
 
 matrix_t convert_to_matrix(PyObject* float_matrix) {
-    // PyObject *float_matrix = NULL;
-    // if (!PyArg_Parse(float_matrix, "O", &float_matrix)) {
-    //     return ERR_MATRIX;
+    // PyObject *list_list = NULL;
+    // if (!PyArg_Parse(float_matrix, "O", &list_list)) {
+        // return ERR_MATRIX;
     // }
 
     if (!PyList_Check(float_matrix)) {
@@ -113,10 +113,16 @@ matrix_t convert_to_matrix(PyObject* float_matrix) {
 static PyObject * c_sym(PyObject * self, PyObject * args) {
     PyObject * py_matrix = NULL;
 
-    if(!PyArg_Parse(args, "O", &py_matrix)) {
+    if(!PyArg_ParseTuple(args, "O", &py_matrix)) {
         PyErr_SetString(PyExc_TypeError, "failure parsing parameters");
         return NULL;
     }
+
+    if (!PyList_Check(py_matrix)) {
+        PyErr_SetString(PyExc_TypeError, "Expected a list of lists");
+        return NULL;
+    }
+    
     matrix_t c_matrix = convert_to_matrix(py_matrix);
     if (c_matrix.data == NULL) {
         return NULL;
@@ -136,10 +142,16 @@ static PyObject * c_sym(PyObject * self, PyObject * args) {
 static PyObject * c_ddg(PyObject * self, PyObject * args) {
     PyObject * py_matrix = NULL;
 
-    if(!PyArg_Parse(args, "O", &py_matrix)) {
+    if(!PyArg_ParseTuple(args, "O", &py_matrix)) {
         PyErr_SetString(PyExc_TypeError, "failure parsing parameters");
         return NULL;
     }
+
+    if (!PyList_Check(py_matrix)) {
+        PyErr_SetString(PyExc_TypeError, "Expected a list of lists");
+        return NULL;
+    }
+
     matrix_t c_matrix = convert_to_matrix(py_matrix);
     if (c_matrix.data == NULL) {
         return NULL;
@@ -159,8 +171,12 @@ static PyObject * c_ddg(PyObject * self, PyObject * args) {
 static PyObject * c_norm(PyObject * self, PyObject * args) {
     PyObject * py_matrix = NULL;
 
-    if(!PyArg_Parse(args, "O", &py_matrix)) {
+    if(!PyArg_ParseTuple(args, "O", &py_matrix)) {
         PyErr_SetString(PyExc_TypeError, "failure parsing parameters");
+        return NULL;
+    }
+    if (!PyList_Check(py_matrix)) {
+        PyErr_SetString(PyExc_TypeError, "Expected a list of lists");
         return NULL;
     }
     matrix_t c_matrix = convert_to_matrix(py_matrix);
@@ -189,6 +205,7 @@ static PyObject * c_symnmf(PyObject * self, PyObject * args) {
         PyErr_SetString(PyExc_TypeError, "failure parsing parameters");
         return NULL;
     }
+
     matrix_t c_H = convert_to_matrix(py_H);
     if (IS_ERR_MAT(c_H)) {
         return NULL;

@@ -7,6 +7,8 @@
 #define ERR_MATRIX ((matrix_t){ 0 })
 #define FROB_ERROR (-1)
 
+#define IS_ERR_MAT(mat) ((mat).data == NULL && (mat).raw_data == NULL)
+
 typedef struct matrix_s {
     double** data;
     double* raw_data; // not recommended for use

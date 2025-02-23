@@ -49,22 +49,22 @@ PyObject * build_list_list_float(matrix_t mat) {
 }
 
 matrix_t convert_to_matrix(PyObject* float_matrix) {
-    PyObject *list_of_lists = NULL;
-    if (!PyArg_Parse(float_matrix, "O", &list_of_lists)) {
-        return ERR_MATRIX;
-    }
+    // PyObject *float_matrix = NULL;
+    // if (!PyArg_Parse(float_matrix, "O", &float_matrix)) {
+    //     return ERR_MATRIX;
+    // }
 
-    if (!PyList_Check(list_of_lists)) {
+    if (!PyList_Check(float_matrix)) {
         PyErr_SetString(PyExc_TypeError, "Expected a list of lists");
         return ERR_MATRIX;
     }
 
     matrix_t ans = (matrix_t){ 0 };
-    ans.height = PyList_Size(list_of_lists);
+    ans.height = PyList_Size(float_matrix);
 
     // verify input correctness
     for (size_t i = 0; i < ans.height; i++) {
-        PyObject *inner_list = PyList_GetItem(list_of_lists, i);
+        PyObject *inner_list = PyList_GetItem(float_matrix, i);
         if (!PyList_Check(inner_list)) {
             PyErr_SetString(PyExc_TypeError, "Inner elements must be lists");
             return ERR_MATRIX;
@@ -93,7 +93,7 @@ matrix_t convert_to_matrix(PyObject* float_matrix) {
     }
 
     for (size_t i = 0; i < ans.height; i++) {
-        PyObject *inner_list = PyList_GetItem(list_of_lists, i);
+        PyObject *inner_list = PyList_GetItem(float_matrix, i);
         ans.data[i] = ans.raw_data + (ans.width * i);
         for (size_t j = 0; j < ans.width; j++) {
             PyObject *item = PyList_GetItem(inner_list, j);

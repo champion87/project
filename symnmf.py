@@ -3,6 +3,7 @@ import sys
 from enum import Enum
 import os
 import numpy as np
+import symnmf
 
 class Goal(Enum):
     SYMNMF = "symnmf"
@@ -16,32 +17,32 @@ DEFAULT_EPSILON = 1e-4
 DEFAULT_MAX_ITER = 300
 DEFAULT_BETA = 0.5
 
-def c_symnmf(
-    initial_H: List[List[float]],
-    W: List[List[float]],
-    epsilon: float = 1e-4,
-    max_iter: int = 300,
-    beta: float = 0.5,
-) -> List[List[float]]:
-    pass
+# def c_symnmf(
+#     initial_H: List[List[float]],
+#     W: List[List[float]],
+#     epsilon: float = 1e-4,
+#     max_iter: int = 300,
+#     beta: float = 0.5,
+# ) -> List[List[float]]:
+#     pass
 
 
-def c_sym(datapoints: List[List[float]]) -> List[List[float]]:
-    pass
+# def c_sym(datapoints: List[List[float]]) -> List[List[float]]:
+#     pass
 
 
-def c_ddg(datapoints: List[List[float]]) -> List[List[float]]:
-    pass
+# def c_ddg(datapoints: List[List[float]]) -> List[List[float]]:
+#     pass
 
 
-def c_norm(datapoints: List[List[float]]) -> List[List[float]]:
-    pass
+# def c_norm(datapoints: List[List[float]]) -> List[List[float]]:
+#     pass
 
 
 def parse_args(args: List[str]) -> Tuple[int, str, str]:
     if len(args) != 3:
-        # print("Usage: python symnmf.py k goal filename")
-        print("An Error Has Occurred")
+        print("Usage: python symnmf.py k goal filename")
+        # print("An Error Has Occurred")
         sys.exit(1)
         
     k = int(args[0])
@@ -49,9 +50,9 @@ def parse_args(args: List[str]) -> Tuple[int, str, str]:
     filename = args[2] # should be a .txt existing file
 
     if goal not in VALID_GOALS:
-        # print(f"Invalid goal: {goal}")
-        # print(f"Valid goals: {VALID_GOALS}")
-        print("An Error Has Occurred")
+        print(f"Invalid goal: {goal}")
+        print(f"Valid goals: {VALID_GOALS}")
+        # print("An Error Has Occurred") # TODO retrive these prints
         sys.exit(1)
     else:
         goal = Goal(goal)
@@ -61,8 +62,8 @@ def parse_args(args: List[str]) -> Tuple[int, str, str]:
         sys.exit(1)
 
     if not os.path.exists(filename) or not filename.endswith(".txt"):
-        # print(f"Bad file: {filename}")
-        print("An Error Has Occurred")
+        print(f"Bad file: {filename}")
+        # print("An Error Has Occurred")
         sys.exit(1)
         
     return k, goal, filename
@@ -84,16 +85,17 @@ if __name__ == "__main__":
     X = np.loadtxt(filename) # TODO can we do this?
     datapoints = X.tolist()
     
+    
     if goal == Goal.SYM:
-        res = A = c_sym(datapoints)
+        res = A = symnmf.sym(datapoints)
     elif goal == Goal.DDG:
-        res = D = c_ddg(datapoints)
+        res = D = symnmf.ddg(datapoints)
     elif goal == Goal.NORM:
-        res = W = c_norm(datapoints)
+        res = W = symnmf.norm(datapoints)
     elif goal == Goal.SYMNMF:
-        W = c_norm(datapoints) # TODO replace this with the c-python call
+        W = symnmf.norm(datapoints) # TODO replace this with the c-python call
         W_np = np.array(W)
         H_init = init_H(k, W_np)
-        res = H_final = c_symnmf(H_init, W, DEFAULT_EPSILON, DEFAULT_MAX_ITER, DEFAULT_BETA)
+        res = H_final = symnmf.symnmf(H_init, W, DEFAULT_EPSILON, DEFAULT_MAX_ITER, DEFAULT_BETA)
 
     print_result(res)        

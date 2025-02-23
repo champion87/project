@@ -53,6 +53,16 @@ double frobenius_distance_squared(matrix_t A, matrix_t B) // TODO: check that th
     return sum;
 }
 
+double euclidean_distance_squared(double *A, double *B, size_t len)
+{
+    double sum = 0;
+    for (size_t i = 0; i < len; i++)
+    {
+        sum += (A[i] - B[i]) * (A[i] - B[i]);
+    }
+    return sum;
+}
+
 
 matrix_t dot(matrix_t A, matrix_t B) // TODO: check that this code is right
 {

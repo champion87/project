@@ -71,7 +71,7 @@ matrix_t dot(matrix_t A, matrix_t B) // TODO: check that this code is right
         return ERR_MATRIX;
     }
 
-    matrix_t result = alloc_matrix(A.height, A.width);
+    matrix_t result = alloc_matrix(A.height, B.width);
     if (IS_ERR_MAT(result)) {
         return ERR_MATRIX;
     }
@@ -94,7 +94,7 @@ matrix_t dot(matrix_t A, matrix_t B) // TODO: check that this code is right
 
 matrix_t transpose(matrix_t A) // TODO: check that this code is right
 {
-    matrix_t result = alloc_matrix(A.height, A.width);
+    matrix_t result = alloc_matrix(A.width, A.height);
     if (IS_ERR_MAT(result)) {
         return ERR_MATRIX;
     }

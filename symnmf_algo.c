@@ -45,6 +45,7 @@ void perform_symnmf_iteration(matrix_t H, matrix_t W, double beta)
 // Assumes that max_iter >= 1
 matrix_t symnmf(matrix_t H, matrix_t W, double eps, size_t max_iter, double beta)
 {
+    H = copy_matrix(H);
     size_t iter_num = 0;
     matrix_t old_H = copy_matrix(H);
     double diff = INVALID_DIFF;

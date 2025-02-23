@@ -50,7 +50,7 @@ PyObject * build_list_list_float(matrix_t mat) {
 
 matrix_t convert_to_matrix(PyObject* float_matrix) {
     PyObject *list_of_lists = NULL;
-    if (!PyArg_ParseTuple(float_matrix, "O", &list_of_lists)) {
+    if (!PyArg_Parse(float_matrix, "O", &list_of_lists)) {
         return ERR_MATRIX;
     }
 

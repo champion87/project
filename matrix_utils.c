@@ -1,4 +1,5 @@
 #include <string.h>
+#include <math.h>
 #include "matrix_utils.h"
 
 matrix_t alloc_matrix(size_t height, size_t width) {
@@ -17,7 +18,7 @@ matrix_t alloc_matrix(size_t height, size_t width) {
         free(result.raw_data);
         return ERR_MATRIX;
     }
-    for (int i = 0; i < result.height; i++) {
+    for (size_t i = 0; i < result.height; i++) {
         result.data[i] = &result.raw_data[i * result.width];
     }
     return result;

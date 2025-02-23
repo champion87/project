@@ -36,7 +36,7 @@ PyObject * build_list_list_float(matrix_t mat) {
     if (!ans) {
         return PyErr_NoMemory(); // Raise a memory error if list creation fails
     }
-    for (Py_ssize_t i = 0; i < mat.height; i++) {
+    for (size_t i = 0; i < mat.height; i++) {
         PyObject * row = build_py_FloatList(mat.data[i], mat.width);
         if (!row) {
             Py_DECREF(ans);
@@ -63,7 +63,7 @@ matrix_t convert_to_matrix(PyObject* float_matrix) {
     ans.height = PyList_Size(list_of_lists);
 
     // verify input correctness
-    for (Py_ssize_t i = 0; i < ans.height; i++) {
+    for (size_t i = 0; i < ans.height; i++) {
         PyObject *inner_list = PyList_GetItem(list_of_lists, i);
         if (!PyList_Check(inner_list)) {
             PyErr_SetString(PyExc_TypeError, "Inner elements must be lists");
@@ -73,7 +73,7 @@ matrix_t convert_to_matrix(PyObject* float_matrix) {
         if (i == 0) {
             ans.width = inner_size;
         }
-        else if (ans.width != inner_size) {
+        else if (ans.width != (size_t)inner_size) {
             PyErr_SetString(PyExc_TypeError, "Inner elements must be lists of the same length");
             return ERR_MATRIX; 
         }
@@ -92,11 +92,10 @@ matrix_t convert_to_matrix(PyObject* float_matrix) {
         return ERR_MATRIX;
     }
 
-    double *data_ptr =  ans.raw_data;
-    for (Py_ssize_t i = 0; i < ans.height; i++) {
+    for (size_t i = 0; i < ans.height; i++) {
         PyObject *inner_list = PyList_GetItem(list_of_lists, i);
         ans.data[i] = ans.raw_data + (ans.width * i);
-        for (Py_ssize_t j = 0; j < ans.width; j++) {
+        for (size_t j = 0; j < ans.width; j++) {
             PyObject *item = PyList_GetItem(inner_list, j);
             if (!PyFloat_Check(item)) {
                 PyErr_SetString(PyExc_TypeError, "All elements must be floats");
@@ -181,7 +180,31 @@ static PyObject * c_norm(PyObject * self, PyObject * args) {
 }
 
 static PyObject * c_symnmf(PyObject * self, PyObject * args) {
-
+    PyObject * py_H = NULL;
+    PyObject * py_W = NULL;
+    double eps = 0;
+    size_t max_iter = 0;
+    double beta = 0;
+    if(!PyArg_ParseTuple(args, "OOdnd", &py_H, &py_W, &eps, &max_iter, &beta)) {
+        PyErr_SetString(PyExc_TypeError, "failure parsing parameters");
+        return NULL;
+    }
+    matrix_t c_H = convert_to_matrix(py_H);
+    if (IS_ERR_MAT(c_H)) {
+        return NULL;
+    }
+    matrix_t c_W = convert_to_matrix(py_W);
+    if (IS_ERR_MAT(c_W)) {
+        free_matrix(c_H);
+        return NULL;
+    }
+    matrix_t ans = symnmf(c_H, c_W, eps, max_iter, beta);
+    if (IS_ERR_MAT(ans)) {
+        PyErr_SetString(PyExc_ValueError, "failure performing the symnmf algorithm for clustering");
+    }
+    free_matrix(c_H);
+    free_matrix(c_W);
+    return build_list_list_float(ans);
 }
 
 

@@ -1,1 +1,6 @@
 */326*
+
+.vscode_ctags
+.vscode/
+*cpython*
+*.o

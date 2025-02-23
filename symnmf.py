@@ -78,6 +78,7 @@ def init_H(k: int, W: np.ndarray) -> np.ndarray:
     mean_W = np.mean(W)
     n = W.shape[0]
     H_init = np.random.uniform(0, 2*((mean_W/k)**0.5), (n, k))
+    return H_init
 
 if __name__ == "__main__":
     np.random.seed(1234)
@@ -95,7 +96,7 @@ if __name__ == "__main__":
     elif goal == Goal.SYMNMF:
         W = symnmf.norm(datapoints) # TODO replace this with the c-python call
         W_np = np.array(W)
-        H_init = init_H(k, W_np)
+        H_init = init_H(k, W_np).tolist()
         res = H_final = symnmf.symnmf(H_init, W, DEFAULT_EPSILON, DEFAULT_MAX_ITER, DEFAULT_BETA)
 
     print_result(res)        

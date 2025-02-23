@@ -1,10 +1,15 @@
+#include <string.h>
 #include "matrix_utils.h"
 
 void free_matrix(matrix_t mat) {
-    if (mat.raw_data != NULL)
+    if (mat.raw_data != NULL) {
+        mat.raw_data = NULL;    
         free(mat.raw_data);
-    if (mat.data != NULL)
+    }
+    if (mat.data != NULL) {
+        mat.data = NULL;
         free(mat.data);
+    }
 }
 
 double frobenius_distance_squared(matrix_t A, matrix_t B) // TODO: check that this code is right
@@ -81,21 +86,25 @@ matrix_t transpose(matrix_t A) // TODO: check that this code is right
 
 matrix_t copy_matrix(matrix_t mat)
 {
-    // matrix_t result = {
-    //     .height = mat.height,
-    //     .width = mat.width,
-    //     .data = malloc(mat.height * sizeof(double*)),
-    //     .raw_data = NULL
-    // };
+    matrix_t result = {
+        .height = mat.height,
+        .width = mat.width,
+        .data = NULL,
+        .raw_data = NULL
+    };
+    result.raw_data = (double*)calloc(result.height * result.width, sizeof(*result.raw_data));
+    if (!result.raw_data) {
+        return ERR_MATRIX;
+    }
+    result.data = (double**)calloc(result.height, sizeof(*result.data));
+    if (!result.data) {
+        free(result.raw_data);
+        return ERR_MATRIX;
+    }
+    memcpy(result.raw_data, mat.raw_data, result.height * result.width * sizeof(*result.raw_data));
+    for (int i = 0; i < result.height; i++) {
+        result.data[i] = &result.raw_data[i * result.width];
+    }
 
-    // for (size_t i = 0; i < mat.height; i++)
-    // {
-    //     result.data[i] = malloc(mat.width * sizeof(double));
-    //     for (size_t j = 0; j < mat.width; j++)
-    //     {
-    //         result.data[i][j] = mat.data[i][j];
-    //     }
-    // }
-
-    // return result;
+    return result;
 }

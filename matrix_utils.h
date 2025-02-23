@@ -19,5 +19,7 @@ matrix_t dot(matrix_t A, matrix_t B);
 matrix_t transpose(matrix_t A);
 matrix_t copy_matrix(matrix_t mat);
 double frobenius_distance_squared(matrix_t A, matrix_t B);
+double euclidean_distance_squared(double *A, double *B, size_t len); //TODO
+matrix_t init_empty_matrix(size_t height, size_t width);
 
 #endif

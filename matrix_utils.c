@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <string.h>
 #include <math.h>
 #include "matrix_utils.h"
@@ -118,4 +119,16 @@ matrix_t copy_matrix(matrix_t mat)
     }
     memcpy(result.raw_data, mat.raw_data, result.height * result.width * sizeof(*result.raw_data));
     return result;
+}
+
+void print_matrix(matrix_t mat)
+{
+    for (size_t i = 0; i < mat.height; i++)
+    {
+        for (size_t j = 0; j < mat.width; j++)
+        {
+            printf("%.4lf%s" , mat.data[i][j], j == mat.width - 1 ? "" : ",");
+        }
+        printf("\n");
+    }
 }

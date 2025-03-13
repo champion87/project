@@ -23,5 +23,6 @@ matrix_t copy_matrix(matrix_t mat);
 double frobenius_distance_squared(matrix_t A, matrix_t B);
 double euclidean_distance_squared(double *A, double *B, size_t len); //TODO
 matrix_t alloc_matrix(size_t height, size_t width);
+void print_matrix(matrix_t mat);
 
 #endif

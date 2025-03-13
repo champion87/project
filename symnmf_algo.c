@@ -1,8 +1,10 @@
-#include "symnmf_algo.h"
-#include "matrix_utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+
+#include "symnmf_algo.h"
+#include "matrix_utils.h"
+
 
 #define INVALID_DIFF (-1)
 #define IS_VALID_DIFF(diff) (diff >= 0)

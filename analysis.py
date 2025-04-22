@@ -5,7 +5,7 @@ from sklearn.metrics import silhouette_score
 from typing import List, Tuple
 
 from kmeans_hw1 import calc_kmeans, process_input_file
-from symnmf_py import calc_symnmf
+from calc_symnmf import calc_symnmf
 
 def parse_args(args: List[str]) -> Tuple[int, str, str]:
     if len(args) != 2:

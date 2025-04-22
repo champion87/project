@@ -1,22 +1,10 @@
 from typing import List, Tuple
 import sys
-from enum import Enum
 import os
 import numpy as np
-import symnmf
-from numpy.typing import NDArray
+from symnmf import sym, ddg, norm
+from calc_symnmf import calc_symnmf, Goal, VALID_GOALS
 
-class Goal(Enum):
-    SYMNMF = "symnmf"
-    DDG = "ddg"
-    NORM = "norm"
-    SYM = "sym"
-
-VALID_GOALS = [goal.value for goal in Goal]
-
-DEFAULT_EPSILON = 1e-4
-DEFAULT_MAX_ITER = 300
-DEFAULT_BETA = 0.5
 
 # def c_symnmf(
 #     initial_H: List[List[float]],
@@ -73,38 +61,7 @@ def print_result(res: List[List[float]]) -> None:
     for row in res:
         print(",".join(f"{x:.4f}" for x in row))
 
-def init_H(k: int, W: np.ndarray) -> np.ndarray:
-    assert len(W.shape) == 2 # TODO remove assertions before submission
-    assert W.shape[0] == W.shape[1]
-    mean_W = np.mean(W)
-    n = W.shape[0]
-    H_init = np.random.uniform(0, 2*((mean_W/k)**0.5), (n, k))
-    return H_init
 
-def calc_symnmf(k:int, filename:str, goal:Goal=Goal.SYMNMF) -> NDArray:
-    print("let's calc symnmf")
-    X = np.loadtxt(filename, delimiter=',')
-    datapoints = X.tolist()
-    
-    if goal == Goal.SYM:
-        res = A = symnmf.sym(datapoints)
-    elif goal == Goal.DDG:
-        res = D = symnmf.ddg(datapoints)
-    elif goal == Goal.NORM:
-        res = W = symnmf.norm(datapoints)
-    elif goal == Goal.SYMNMF:
-        print("found the goal")
-        print(f"{len(datapoints) = }")
-        W = symnmf.norm(datapoints) 
-        print("avner's norm is done")
-        W_np = np.array(W)
-        print("let's init H")
-        H_init = init_H(k, W_np).tolist()
-        print("avner start")
-        res = H_final = symnmf.symnmf(H_init, W, DEFAULT_EPSILON, DEFAULT_MAX_ITER, DEFAULT_BETA)
-        print("avner end")
-
-    return np.array(res)
 
 if __name__ == "__main__":    
     np.random.seed(1234)

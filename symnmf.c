@@ -73,7 +73,7 @@ matrix_t pasre_input(const char * filename) {
 int main(int argc, char* argv[]) {
 
     if (argc != 3) {
-        printf("Usage: python symnmf.py k goal filename\n");
+        printf("Usage: ./symnmf goal filename\n");
         exit(1);
     }
 

@@ -4,6 +4,7 @@ from enum import Enum
 import os
 import numpy as np
 import symnmf
+from numpy.typing import NDArray
 
 class Goal(Enum):
     SYMNMF = "symnmf"
@@ -80,12 +81,10 @@ def init_H(k: int, W: np.ndarray) -> np.ndarray:
     H_init = np.random.uniform(0, 2*((mean_W/k)**0.5), (n, k))
     return H_init
 
-if __name__ == "__main__":
-    np.random.seed(1234)
-    k, goal, filename = parse_args(sys.argv[1:])
-    X = np.loadtxt(filename) # TODO can we do this?
+def calc_symnmf(k:int, filename:str, goal:Goal=Goal.SYMNMF) -> NDArray:
+    print("let's calc symnmf")
+    X = np.loadtxt(filename, delimiter=',')
     datapoints = X.tolist()
-    
     
     if goal == Goal.SYM:
         res = A = symnmf.sym(datapoints)
@@ -94,9 +93,21 @@ if __name__ == "__main__":
     elif goal == Goal.NORM:
         res = W = symnmf.norm(datapoints)
     elif goal == Goal.SYMNMF:
-        W = symnmf.norm(datapoints) # TODO replace this with the c-python call
+        print("found the goal")
+        print(f"{len(datapoints) = }")
+        W = symnmf.norm(datapoints) 
+        print("avner's norm is done")
         W_np = np.array(W)
+        print("let's init H")
         H_init = init_H(k, W_np).tolist()
+        print("avner start")
         res = H_final = symnmf.symnmf(H_init, W, DEFAULT_EPSILON, DEFAULT_MAX_ITER, DEFAULT_BETA)
+        print("avner end")
 
+    return np.array(res)
+
+if __name__ == "__main__":    
+    np.random.seed(1234)
+    k, goal, filename = parse_args(sys.argv[1:])
+    res = calc_symnmf(k, filename, goal)
     print_result(res)        

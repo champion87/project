@@ -48,11 +48,11 @@ if __name__ == "__main__":
     kmeans_centroids = calc_kmeans(k, filename)
     kmeans_labels = calc_kmeans_labels(points, kmeans_centroids)
     kmeans_score = silhouette_score(points, kmeans_labels)
-    print("done kmeans")
     
     symnmf_result = calc_symnmf(k, filename)
-    print("calculated symnmf")    
     symnmf_labels = calc_symnmf_labels(points, symnmf_result)
+    # print(symnmf_result)
+    # print(symnmf_labels)
     symnmf_score = silhouette_score(points, symnmf_labels)
     
     print(f"nmf: {symnmf_score:.4f}")

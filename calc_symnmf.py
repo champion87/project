@@ -25,10 +25,12 @@ def init_H(k: int, W: np.ndarray) -> np.ndarray:
     return H_init
 
 def calc_symnmf(k:int, filename:str, goal:Goal=Goal.SYMNMF) -> NDArray:
-    print("let's calc symnmf")
-    X = np.loadtxt(filename, delimiter=',')
+    X = np.loadtxt(filename, delimiter=',', ndmin=2)
     datapoints = X.tolist()
-    
+    # print(datapoints)
+    # print(type(datapoints))
+    # print(type(datapoints[0]))
+    # print(type(datapoints[0][0]))
     if goal == Goal.SYM:
         res = A = symnmf.sym(datapoints)
     elif goal == Goal.DDG:
@@ -36,15 +38,10 @@ def calc_symnmf(k:int, filename:str, goal:Goal=Goal.SYMNMF) -> NDArray:
     elif goal == Goal.NORM:
         res = W = symnmf.norm(datapoints)
     elif goal == Goal.SYMNMF:
-        print("found the goal")
-        print(f"{len(datapoints) = }")
         W = symnmf.norm(datapoints) 
-        print("avner's norm is done")
         W_np = np.array(W)
-        print("let's init H")
         H_init = init_H(k, W_np).tolist()
-        print("avner start")
+        # print(f"Initial H: {H_init}")
         res = H_final = symnmf.symnmf(H_init, W, DEFAULT_EPSILON, DEFAULT_MAX_ITER, DEFAULT_BETA)
-        print("avner end")
 
     return np.array(res)

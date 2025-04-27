@@ -17,8 +17,8 @@ DEFAULT_MAX_ITER = 300
 DEFAULT_BETA = 0.5
 
 def init_H(k: int, W: np.ndarray) -> np.ndarray:
-    assert len(W.shape) == 2 # TODO remove assertions before submission
-    assert W.shape[0] == W.shape[1]
+    # assert len(W.shape) == 2 # TODO remove assertions before submission
+    # assert W.shape[0] == W.shape[1]
     mean_W = np.mean(W)
     n = W.shape[0]
     H_init = np.random.uniform(0, 2*((mean_W/k)**0.5), (n, k))
@@ -27,10 +27,6 @@ def init_H(k: int, W: np.ndarray) -> np.ndarray:
 def calc_symnmf(k:int, filename:str, goal:Goal=Goal.SYMNMF) -> NDArray:
     X = np.loadtxt(filename, delimiter=',', ndmin=2)
     datapoints = X.tolist()
-    # print(datapoints)
-    # print(type(datapoints))
-    # print(type(datapoints[0]))
-    # print(type(datapoints[0][0]))
     if goal == Goal.SYM:
         res = A = symnmf.sym(datapoints)
     elif goal == Goal.DDG:
@@ -41,7 +37,6 @@ def calc_symnmf(k:int, filename:str, goal:Goal=Goal.SYMNMF) -> NDArray:
         W = symnmf.norm(datapoints) 
         W_np = np.array(W)
         H_init = init_H(k, W_np).tolist()
-        # print(f"Initial H: {H_init}")
         res = H_final = symnmf.symnmf(H_init, W, DEFAULT_EPSILON, DEFAULT_MAX_ITER, DEFAULT_BETA)
 
     return np.array(res)

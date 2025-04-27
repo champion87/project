@@ -5,33 +5,10 @@ import numpy as np
 from symnmf import sym, ddg, norm
 from calc_symnmf import calc_symnmf, Goal, VALID_GOALS
 
-
-# def c_symnmf(
-#     initial_H: List[List[float]],
-#     W: List[List[float]],
-#     epsilon: float = 1e-4,
-#     max_iter: int = 300,
-#     beta: float = 0.5,
-# ) -> List[List[float]]:
-#     pass
-
-
-# def c_sym(datapoints: List[List[float]]) -> List[List[float]]:
-#     pass
-
-
-# def c_ddg(datapoints: List[List[float]]) -> List[List[float]]:
-#     pass
-
-
-# def c_norm(datapoints: List[List[float]]) -> List[List[float]]:
-#     pass
-
-
 def parse_args(args: List[str]) -> Tuple[int, str, str]:
     if len(args) != 3:
-        print("Usage: python symnmf.py k goal filename")
-        # print("An Error Has Occurred")
+        # print("Usage: python symnmf.py k goal filename")
+        print("An Error Has Occurred")
         sys.exit(1)
         
     k = int(args[0])
@@ -39,20 +16,21 @@ def parse_args(args: List[str]) -> Tuple[int, str, str]:
     filename = args[2] # should be a .txt existing file
 
     if goal not in VALID_GOALS:
-        print(f"Invalid goal: {goal}")
-        print(f"Valid goals: {VALID_GOALS}")
-        # print("An Error Has Occurred") # TODO retrive these prints
+        # print(f"Invalid goal: {goal}")
+        # print(f"Valid goals: {VALID_GOALS}")
+        print("An Error Has Occurred")
         sys.exit(1)
     else:
         goal = Goal(goal)
         
     if k <= 0:
-        print(f"Invalid k: {k}")
+        # print(f"Invalid k: {k}")
+        print("An Error Has Occurred")
         sys.exit(1)
 
     if not os.path.exists(filename) or not filename.endswith(".txt"):
-        print(f"Bad file: {filename}")
-        # print("An Error Has Occurred")
+        # print(f"Bad file: {filename}")
+        print("An Error Has Occurred")
         sys.exit(1)
         
     return k, goal, filename

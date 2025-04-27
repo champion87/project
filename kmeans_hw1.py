@@ -88,10 +88,12 @@ def calc_kmeans(K: int, input_data: str, iter: int = 200, eps = EPSILON, initial
     """
     points = process_input_file(input_data) if input_points is None else input_points
     if not (1 < K < len(points)):
-        print("Invalid number of clusters!")
+        # print("Invalid number of clusters!")
+        print("An Error Has Occurred.")
         exit(1)
     if not (1 < iter < 1000):
-        print("Invalid maximum iteration!")
+        # print("Invalid maximum iteration!")
+        print("An Error Has Occurred.")
         exit(1)
 
     # Initializations
@@ -116,20 +118,21 @@ def calc_kmeans(K: int, input_data: str, iter: int = 200, eps = EPSILON, initial
         centroids = np.array(new_centroids)
 
     return centroids
-    # print_centroids(centroids)
 
 def fit(initial_centroids, points, k, eps, iter):
     return calc_kmeans(k, points, iter, eps, initial_centroids, points)
 
 def kmeans_main() -> np.ndarray:
     if not len(sys.argv) in [3, 4]:
-        print("Usage: python kmeans.py <K> [<iter>] <input_data>")
+        # print("Usage: python kmeans.py <K> [<iter>] <input_data>")
+        print("An Error Has Occurred.")
         sys.exit(1)
 
     try:
         K = int(sys.argv[1])
     except ValueError as e:
-        print("Invalid number of clusters!")
+        # print("Invalid number of clusters!")
+        print("An Error Has Occurred.")
         exit(1)
 
     filename = str(sys.argv[-1])
@@ -144,7 +147,8 @@ def kmeans_main() -> np.ndarray:
         try:
             iter = int(sys.argv[2])
         except ValueError as e:
-            print("Invalid maximum iteration!")
+            # print("Invalid maximum iteration!")
+            print("An Error Has Occurred.")
             exit(1)
 
         return calc_kmeans(K, filename, iter)

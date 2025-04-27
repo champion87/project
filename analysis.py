@@ -9,20 +9,21 @@ from calc_symnmf import calc_symnmf
 
 def parse_args(args: List[str]) -> Tuple[int, str, str]:
     if len(args) != 2:
-        print("Usage: python symnmf.py k filename")
-        # print("An Error Has Occurred")
+        # print("Usage: python symnmf.py k filename")
+        print("An Error Has Occurred")
         sys.exit(1)
         
     k = int(args[0])
-    filename = args[1] # should be a .txt existing file
+    filename = args[1] # assuming a .txt existing file
     
     if k <= 0:
-        print(f"Invalid k: {k}")
+        # print(f"Invalid k: {k}")
+        print("An Error Has Occurred")
         sys.exit(1)
         
     if not os.path.exists(filename) or not filename.endswith(".txt"):
-        print(f"Bad file: {filename}")
-        # print("An Error Has Occurred")
+        # print(f"Bad file: {filename}")
+        print("An Error Has Occurred")
         sys.exit(1)
         
     return k, filename
@@ -51,8 +52,6 @@ if __name__ == "__main__":
     
     symnmf_result = calc_symnmf(k, filename)
     symnmf_labels = calc_symnmf_labels(points, symnmf_result)
-    # print(symnmf_result)
-    # print(symnmf_labels)
     symnmf_score = silhouette_score(points, symnmf_labels)
     
     print(f"nmf: {symnmf_score:.4f}")

@@ -4,3 +4,5 @@
 .vscode/
 *cpython*
 *.o
+Prev_final_100
+compareTester.sh

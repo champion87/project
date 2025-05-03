@@ -43,8 +43,8 @@ void perform_symnmf_iteration(matrix_t H, matrix_t W, double beta)
     free_matrix(HHTH);
 }
 
-// TODO make sure to free everything
-// Assumes that max_iter >= 1
+// Performs the symnmf algorithm for clustering.
+// ! Assumes that max_iter >= 1
 matrix_t symnmf(matrix_t H, matrix_t W, double eps, size_t max_iter, double beta)
 {
     H = copy_matrix(H);
@@ -63,13 +63,15 @@ matrix_t symnmf(matrix_t H, matrix_t W, double eps, size_t max_iter, double beta
     free_matrix(old_H);
     return H;
 }
-
+// Calculates the similarity index between two points in the dataset.
+// The similarity index is calculated using the formula exp(-0.5 * ||x_i - x_j||^2), where x_i and x_j are the two points.
 double calc_sym_index(matrix_t datapoints, size_t i, size_t j)
 {
     if (i == j) { return 0; }
     else { return exp(-0.5 * euclidean_distance_squared(datapoints.data[i], datapoints.data[j], datapoints.width)); }
 }
 
+// Calculates the similarity matrix for the given dataset.
 matrix_t sym(matrix_t datapoints)
 {
     matrix_t A = alloc_matrix(datapoints.height, datapoints.height);
@@ -85,6 +87,7 @@ matrix_t sym(matrix_t datapoints)
     return A;
 }
 
+// Calculates the degree of a vertex in the graph represented by the adjacency matrix A.
 double calc_degree_of_vertex(matrix_t A, size_t i)
 {
     double sum = 0;
@@ -95,6 +98,7 @@ double calc_degree_of_vertex(matrix_t A, size_t i)
     return sum;
 }
 
+// Calculates the diagonal degree matrix for the given dataset.
 matrix_t ddg(matrix_t datapoints)
 {
     matrix_t A = sym(datapoints);
@@ -109,7 +113,7 @@ matrix_t ddg(matrix_t datapoints)
     return D;
 }
 
-
+// Calculates the normalized similarity matrix for the given dataset.
 matrix_t norm(matrix_t datapoints)
 {
     matrix_t D = ddg(datapoints);

@@ -3,6 +3,8 @@
 #include <math.h>
 #include "matrix_utils.h"
 
+// allocates a matrix of the given height and width.
+// Returns a matrix_t struct with the allocated data.
 matrix_t alloc_matrix(size_t height, size_t width) {
     matrix_t result = {
         .height = height,
@@ -25,6 +27,7 @@ matrix_t alloc_matrix(size_t height, size_t width) {
     return result;
 }
 
+// Frees the memory allocated for the matrix.
 void free_matrix(matrix_t mat) {
     if (mat.raw_data != NULL) {
         free(mat.raw_data);
@@ -35,6 +38,8 @@ void free_matrix(matrix_t mat) {
     mat = ERR_MATRIX;
 }
 
+// Calculates the Frobenius distance squared between two matrices.
+// Returns FROB_ERROR if the matrices have different dimensions.
 double frobenius_distance_squared(matrix_t A, matrix_t B) // TODO: check that this code is right
 {
     if (A.height != B.height || A.width != B.width)
@@ -54,6 +59,7 @@ double frobenius_distance_squared(matrix_t A, matrix_t B) // TODO: check that th
     return sum;
 }
 
+// Calculates the squared Euclidean distance between two vectors of the same length.
 double euclidean_distance_squared(double *A, double *B, size_t len)
 {
     double sum = 0;
@@ -64,7 +70,8 @@ double euclidean_distance_squared(double *A, double *B, size_t len)
     return sum;
 }
 
-
+// Calculates the dot product of two matrices.
+// ! allocate result matrix
 matrix_t dot(matrix_t A, matrix_t B) // TODO: check that this code is right
 {
     if (A.width != B.height)
@@ -93,6 +100,8 @@ matrix_t dot(matrix_t A, matrix_t B) // TODO: check that this code is right
     return result;
 }
 
+// Calculates the transpose of a matrix.
+// ! allocate result matrix
 matrix_t transpose(matrix_t A) // TODO: check that this code is right
 {
     matrix_t result = alloc_matrix(A.width, A.height);
@@ -110,7 +119,8 @@ matrix_t transpose(matrix_t A) // TODO: check that this code is right
 
     return result;
 }
-
+// Copies a matrix.
+// ! allocate result matrix
 matrix_t copy_matrix(matrix_t mat)
 {
     matrix_t result = alloc_matrix(mat.height, mat.width);
@@ -121,6 +131,7 @@ matrix_t copy_matrix(matrix_t mat)
     return result;
 }
 
+// Prints the matrix to the console.
 void print_matrix(matrix_t mat)
 {
     for (size_t i = 0; i < mat.height; i++)

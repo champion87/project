@@ -1,13 +1,18 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
+
 #include "symnmf_algo.h"
+#include "matrix_utils.h"
 
 
 
-
-
-
-
+/**
+ * Convert a C array of doubles to a Python list of floats.
+ *
+ * @param cords A pointer to a C array of doubles.
+ * @param len The number of elements in the array.
+ * @return A Python list of floats on success, or NULL on memory error.
+ */
 PyObject * build_py_FloatList(double * cords, size_t len) {
     PyObject * ans;
     
@@ -29,7 +34,12 @@ PyObject * build_py_FloatList(double * cords, size_t len) {
     return ans;
 }
 
-
+/**
+ * Convert a C matrix (matrix_t) to a Python list of list of floats.
+ *
+ * @param mat A matrix_t struct representing the matrix.
+ * @return A Python list of lists of floats on success, or NULL on memory error.
+ */
 PyObject * build_list_list_float(matrix_t mat) {
     PyObject * ans;
     ans = PyList_New(mat.height);
@@ -48,6 +58,12 @@ PyObject * build_list_list_float(matrix_t mat) {
     return ans;
 }
 
+/**
+ * Convert a Python list of lists of floats into a matrix_t.
+ *
+ * @param float_matrix A PyObject representing the matrix.
+ * @return A matrix_t structure with allocated data, or ERR_MATRIX on error.
+ */
 matrix_t convert_to_matrix(PyObject* float_matrix) {
     // PyObject *list_list = NULL;
     // if (!PyArg_Parse(float_matrix, "O", &list_list)) {
@@ -110,6 +126,9 @@ matrix_t convert_to_matrix(PyObject* float_matrix) {
     return ans;
 }
 
+/**
+ * Python wrapper for computing the similarity matrix (SYM).
+ */
 static PyObject * c_sym(PyObject * self, PyObject * args) {
     PyObject * py_matrix = NULL;
 
@@ -139,6 +158,9 @@ static PyObject * c_sym(PyObject * self, PyObject * args) {
     return py_result;
 }
 
+/**
+ * Python wrapper for computing the diagonal degree matrix (DDG).
+ */
 static PyObject * c_ddg(PyObject * self, PyObject * args) {
     PyObject * py_matrix = NULL;
 
@@ -258,7 +280,15 @@ static PyMethodDef symnmfMethods[] = {
 static struct PyModuleDef symnmfmodule = {
     PyModuleDef_HEAD_INIT,
     "symnmf", /* name of module */
-    "TODO", /* TODO */
+    "symnmf: A Python C extension module that implements Symmetric Non-negative Matrix Factorization (SymNMF).\n"
+    "\n"
+    "Provides fast implementations of:\n"
+    "- Similarity matrix computation (sym)\n"
+    "- Diagonal degree matrix computation (ddg)\n"
+    "- Normalized similarity matrix computation (norm)\n"
+    "- SymNMF optimization for clustering (symnmf)\n"
+    "\n"
+    "All functions operate on a list of lists of floats (matrix format).", /* TODO */
     -1,  /* size of per-interpreter state of the module, or -1 if the module keeps state in global variables. */
     symnmfMethods /* the PyMethodDef array from before containing the methods of the extension */
 };

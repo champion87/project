@@ -1,12 +1,13 @@
 import os
 import numpy as np
+import numpy.typing as npt
 from typing import List
 import sys
 
 EPSILON = 0.001
 
 
-def process_input_file(filepath: str) -> List[np.ndarray]:
+def process_input_file(filepath: str) -> List[npt.NDArray]:
     """
     Processes an input file containing vectors.
     Each line in the file should contain the same amount comma-separated values.
@@ -30,12 +31,12 @@ def process_input_file(filepath: str) -> List[np.ndarray]:
     return points
 
 
-def print_centroids(centroids: np.ndarray) -> None:
+def print_centroids(centroids: npt.NDArray) -> None:
     """
     Print the final cluster assignments.
 
     Args:
-        centroids (np.ndarray): The final centroids.
+        centroids (npt.NDArray): The final centroids.
     Returns:
         None
     """
@@ -43,7 +44,7 @@ def print_centroids(centroids: np.ndarray) -> None:
         print(",".join(f"{coord:.4f}" for coord in centroid))
 
 
-def assign_clusters(points: List[np.ndarray], centroids: List[np.ndarray]) -> List[int]:
+def assign_clusters(points: List[npt.NDArray], centroids: List[npt.NDArray]) -> List[int]:
     """
     Assign each point to the nearest centroid.
 
@@ -62,7 +63,7 @@ def assign_clusters(points: List[np.ndarray], centroids: List[np.ndarray]) -> Li
     return clusters
 
 
-def calculate_new_centroids(clusters: List[List[np.ndarray]]) -> List[np.ndarray]:
+def calculate_new_centroids(clusters: List[List[npt.NDArray]]) -> List[npt.NDArray]:
     """
     Calculate the new centroids based on the points in each cluster.
 
@@ -81,7 +82,7 @@ def calc_kmeans(
     eps=EPSILON,
     initial_centroids=None,
     input_points=None,
-) -> np.ndarray:
+) -> npt.NDArray:
     """
     Perform K-means clustering on the given input data.
     Returns the final cluster assignments.
@@ -136,7 +137,7 @@ def fit(initial_centroids, points, k, eps, iter):
     return calc_kmeans(k, points, iter, eps, initial_centroids, points)
 
 
-def kmeans_main() -> np.ndarray:
+def kmeans_main() -> npt.NDArray:
     if not len(sys.argv) in [3, 4]:
         # print("Usage: python kmeans.py <K> [<iter>] <input_data>")
         print("An Error Has Occurred.")

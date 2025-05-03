@@ -22,7 +22,7 @@ DEFAULT_MAX_ITER = 300
 DEFAULT_BETA = 0.5
 
 
-def init_H(k: int, W: np.ndarray) -> np.ndarray:
+def init_H(k: int, W: NDArray) -> NDArray:
     """
     Initialize the H matrix for the SYMNMF algorithm.
     Args:

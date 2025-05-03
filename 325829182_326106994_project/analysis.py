@@ -1,6 +1,7 @@
 import sys
 import os
 import numpy as np
+import numpy.typing as npt
 from sklearn.metrics import silhouette_score
 from typing import List, Tuple
 
@@ -37,7 +38,9 @@ def parse_args(args: List[str]) -> Tuple[int, str, str]:
     return k, filename
 
 
-def calc_kmeans_labels(points: List[np.ndarray], centroids: np.ndarray) -> np.ndarray:
+def calc_kmeans_labels(
+    points: List[npt.NDArray], centroids: npt.NDArray
+) -> npt.NDArray:
     """
     Assigns labels to points based on the closest centroid.
     Args:
@@ -54,8 +57,8 @@ def calc_kmeans_labels(points: List[np.ndarray], centroids: np.ndarray) -> np.nd
 
 
 def calc_symnmf_labels(
-    points: List[np.ndarray], symnmf_result: np.ndarray
-) -> np.ndarray:
+    points: List[npt.NDArray], symnmf_result: npt.NDArray
+) -> npt.NDArray:
     """
     Assigns labels to points based on the associasion matrix H (the symnmf's result).
     Args:

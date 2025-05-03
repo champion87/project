@@ -73,7 +73,15 @@ def calculate_new_centroids(clusters: List[List[np.ndarray]]) -> List[np.ndarray
     """
     return [np.mean(cluster, axis=0) for cluster in clusters]
 
-def calc_kmeans(K: int, input_data: str, iter: int = 200, eps = EPSILON, initial_centroids = None, input_points = None) -> np.ndarray:
+
+def calc_kmeans(
+    K: int,
+    input_data: str,
+    iter: int = 200,
+    eps=EPSILON,
+    initial_centroids=None,
+    input_points=None,
+) -> np.ndarray:
     """
     Perform K-means clustering on the given input data.
     Returns the final cluster assignments.
@@ -97,7 +105,11 @@ def calc_kmeans(K: int, input_data: str, iter: int = 200, eps = EPSILON, initial
         exit(1)
 
     # Initializations
-    centroids = np.array(points[:K]) if initial_centroids is None else np.array(initial_centroids)
+    centroids = (
+        np.array(points[:K])
+        if initial_centroids is None
+        else np.array(initial_centroids)
+    )
     i = 0
     has_converged = False
 
@@ -119,8 +131,10 @@ def calc_kmeans(K: int, input_data: str, iter: int = 200, eps = EPSILON, initial
 
     return centroids
 
+
 def fit(initial_centroids, points, k, eps, iter):
     return calc_kmeans(k, points, iter, eps, initial_centroids, points)
+
 
 def kmeans_main() -> np.ndarray:
     if not len(sys.argv) in [3, 4]:
